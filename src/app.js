@@ -57,10 +57,20 @@ function request(obj,done) {
 // });
 function print(data){
 	//console.log(data);
-	 var myDiv = document.getElementById("resources");
+//	 var myDiv = document.getElementById("resources");
 	 //var myP = document.createElement("<p>");
 	// myP.appendChild(document.createTextNode(data.representationName));
-	 myDiv.appendChild(document.createTextNode(data.representationName + ' '));
+	 //myDiv.appendChild(document.createTextNode(data.representationName + ' '));
+
+	 // document.getElementById('resources')
+	 // .innerHTML = '<span >' + data.representationName +'</span><br>';
+ var ul = document.getElementById("list");
+    var li = document.createElement("li");
+    var children = ul.children.length + 1
+    li.setAttribute("id", "element"+children)
+    li.appendChild(document.createTextNode(
+    '('+ data.representationName +')  '+ data.source.cf.cf_group_cpAttributes.cf_char_address[0]));
+    ul.appendChild(li);
 }
 
 function request(obj) {
