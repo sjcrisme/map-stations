@@ -1,3 +1,5 @@
+//const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
 module.exports = {
   entry: './src/app.js',
   output: {
@@ -17,7 +19,15 @@ module.exports = {
 	        	presets: ['es2015'] 
 	        }
 	      }]
-	    }
+	    },
+	    {
+			  test: /\.css$/,
+			  use: [
+			  	'style-loader',
+    			'css-loader',
+    			'sass-loader'
+			  ]
+			}
 	  ]
 	}
 }

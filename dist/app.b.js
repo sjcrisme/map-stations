@@ -76,6 +76,8 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//import css from './css/app.css';
+
 var a = 'a'; // console.log("hello webpack ++");
 
 console.log('Hello webpack 2', _lodash2.default.isEqual(2, 2));
