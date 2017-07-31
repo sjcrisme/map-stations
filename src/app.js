@@ -154,7 +154,7 @@ request({
 });
 */
 
-
+// chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
 const keyLoginUrl  = 'https://ecs-xm.icthh.com/cxf/xm-security-rs-api/v1/auth/login';
 const resourcesUrl = 'https://ecs-xm.icthh.com/cxf/xm-search-rs-api/v1/search';
 
@@ -163,19 +163,19 @@ const loginJson = {"credentials": {
 		             "password": "forwidget" 
 					}};
 const resourceJson = {  
-		   "entries":[  
-		      {  
-		         "key":{  
-		            "entityType":{"name":"RESOURCE_ENTITY"}
-		         },
-		         "value":"rd_r_type_code:PHYSICAL_ATOMIC_CP AND entity_state:AVAILABLE" 
-		      }
-		   ],
-		   "pagination":{  
-		      "offset":0,
-		      "limit":1000
-		   }
-  		};					
+  		   "entries":[  
+  		      {
+  		         "key":{
+  		            "entityType":{ "name":"RESOURCE_ENTITY" }
+  		         },
+  		         "value":"rd_r_type_code:PHYSICAL_ATOMIC_CP AND entity_state:AVAILABLE" 
+  		      }
+  		   ],
+  		   "pagination":{  
+  		      "offset":0,
+  		      "limit":1000
+  		   }
+    		};
 
  function oldxhr(obj) {
  	return new Promise((resolve, reject) => {
@@ -232,32 +232,6 @@ const resourceJson = {
  	}
  }
 
-
-
-// const MymakeRequest = async () => {
-
-// 	const data = oldxhr({
-// 	  	url:keyLoginUrl,
-// 	  	method:"POST",
-// 	  	headers:{'Content-Type':'application/json','Access-Control-Allow-Origin':'*'},
-// 	  	body:JSON.stringify(loginJson)
-// 	});
-// 	console.log(data);
-// }
-  
-  // if (data.needsAnotherRequest) {
-  //   const moreData = await makeAnotherRequest(data);
-  //   console.log(moreData)
-  //   return moreData
-  // } else {
-  //   console.log(data)
-  //   return data    
-  // }
-//}//makeRequest
-
-
-//MymakeRequest();
-//etchAsync();
 makeAsyncRequest().then(function(data){
 	console.log(data);
 });
