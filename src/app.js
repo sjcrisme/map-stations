@@ -26,7 +26,6 @@ function request(obj,done) {
         console.log(xhr.statusText);
     };
     xhr.send(obj.body);
-    
 }
 //JSON.parse(data)
 
@@ -55,6 +54,10 @@ function request(obj,done) {
 // makeRequest().then((result) => {
 // 	console.log("then");
 // });
+
+
+
+/*
 function print(data){
 	//console.log(data);
 //	 var myDiv = document.getElementById("resources");
@@ -148,4 +151,113 @@ request({
 })
 .catch(function (err) {
   console.error('Augh, there was an error with getting accessToken!', err.statusText);
+});
+*/
+
+
+const keyLoginUrl  = 'https://ecs-xm.icthh.com/cxf/xm-security-rs-api/v1/auth/login';
+const resourcesUrl = 'https://ecs-xm.icthh.com/cxf/xm-search-rs-api/v1/search';
+
+const loginJson = {"credentials": {
+		             "user": "forwidget",
+		             "password": "forwidget" 
+					}};
+const resourceJson = {  
+		   "entries":[  
+		      {  
+		         "key":{  
+		            "entityType":{"name":"RESOURCE_ENTITY"}
+		         },
+		         "value":"rd_r_type_code:PHYSICAL_ATOMIC_CP AND entity_state:AVAILABLE" 
+		      }
+		   ],
+		   "pagination":{  
+		      "offset":0,
+		      "limit":1000
+		   }
+  		};					
+
+ function oldxhr(obj) {
+ 	return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+
+    	xhr.open(obj.method || "GET", obj.url);
+    	if (obj.headers) {
+	        Object.keys(obj.headers).forEach(function(key) {
+	            xhr.setRequestHeader(key, obj.headers[key]);
+	        });
+    	}
+		//xhr.onload = _ => JSON.parse(xhr.response);
+		xhr.onload = function() {
+	        if (xhr.status >= 200 && xhr.status < 300) {
+	           resolve(xhr.response);
+	        } else {
+	            reject(xhr.statusText);
+	        }
+	    };
+	    xhr.onerror = function() {
+	        reject(xhr.statusText);
+	    };
+    
+		xhr.send(obj.body);
+	})
+}
+
+
+ const makeAsyncRequest  = async () => {
+ 	try{
+ 		let accessToken;
+ 		let dataLogin = await oldxhr({
+						  	url:keyLoginUrl,
+						  	method:"POST",
+						  	headers:{'Content-Type':'application/json','Access-Control-Allow-Origin':'*'},
+						  	body:JSON.stringify(loginJson)
+						  });
+ 		accessToken = JSON.parse(dataLogin).accessToken;
+
+ 		let dataResources = await oldxhr({
+						  	url:resourcesUrl,
+						  	method:"POST",
+						  	headers:{'Content-Type':'application/json',
+						  			 'Access-Control-Allow-Origin':'*',
+						  			 'XM-CLIENT-ACCESSTOKEN':accessToken,
+						  			},
+						  	body:JSON.stringify(resourceJson)
+						  });
+ 		//console.log(JSON.parse(dataResources).entities);
+ 		return JSON.parse(dataResources).entities;
+ 	}
+ 	catch(e){
+ 		console.log(e);
+ 	}
+ }
+
+
+
+// const MymakeRequest = async () => {
+
+// 	const data = oldxhr({
+// 	  	url:keyLoginUrl,
+// 	  	method:"POST",
+// 	  	headers:{'Content-Type':'application/json','Access-Control-Allow-Origin':'*'},
+// 	  	body:JSON.stringify(loginJson)
+// 	});
+// 	console.log(data);
+// }
+  
+  // if (data.needsAnotherRequest) {
+  //   const moreData = await makeAnotherRequest(data);
+  //   console.log(moreData)
+  //   return moreData
+  // } else {
+  //   console.log(data)
+  //   return data    
+  // }
+//}//makeRequest
+
+
+//MymakeRequest();
+//etchAsync();
+makeAsyncRequest().then(function(data){
+	console.log(data);
 });
