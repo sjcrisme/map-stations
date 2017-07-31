@@ -67,7 +67,7 @@ function print(data){
  var ul = document.getElementById("list");
     var li = document.createElement("li");
     var children = ul.children.length + 1
-    li.setAttribute("id", "element"+children)
+    li.setAttribute("id", "element"+data.entityId)
     li.appendChild(document.createTextNode(
     '('+ data.representationName +')  '+ data.source.cf.cf_group_cpAttributes.cf_char_address[0]));
     ul.appendChild(li);
@@ -126,9 +126,7 @@ request({
 		   "entries":[  
 		      {  
 		         "key":{  
-		            "entityType":{  
-		               "name":"RESOURCE_ENTITY" 
-		            }
+		            "entityType":{"name":"RESOURCE_ENTITY"}
 		         },
 		         "value":"rd_r_type_code:PHYSICAL_ATOMIC_CP AND entity_state:AVAILABLE" 
 		      }
@@ -146,7 +144,6 @@ request({
 	}).catch(function(err){
 		console.error('Augh, there was an error with getting resourcess!', err.statusText);
 	});
-
 
 })
 .catch(function (err) {
