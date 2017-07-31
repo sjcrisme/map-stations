@@ -55,7 +55,13 @@ function request(obj,done) {
 // makeRequest().then((result) => {
 // 	console.log("then");
 // });
-
+function print(data){
+	//console.log(data);
+	 var myDiv = document.getElementById("resources");
+	 //var myP = document.createElement("<p>");
+	// myP.appendChild(document.createTextNode(data.representationName));
+	 myDiv.appendChild(document.createTextNode(data.representationName + ' '));
+}
 
 function request(obj) {
   return new Promise(function (resolve, reject) {
@@ -124,6 +130,7 @@ request({
   		})
 	}).then(function(data){
 		console.log( JSON.parse(data).entities);
+		_.map(JSON.parse(data).entities, print);
 		// return JSON.parse(data).entities;
 
 	}).catch(function(err){
