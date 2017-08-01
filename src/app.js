@@ -236,57 +236,84 @@ const makeAsyncRequest  = async () => {
 
 function initMap() {
     makeAsyncRequest().then(function(data){ 
-    	console.log(data);
+//    	console.log(data);
+    	var resources =[];
+    	var error_resources=[];
+    	var markers =[];
 
-    	var Ukraine = {lat: 50.47149085,lng: 30.54199219};
+    	 data.map((elm)=>{
+    	 	if(elm.source.cf.cf_group_cpAttributes.cf_char_gpsLatitude[0]!==undefined ||
+    	 	 elm.source.cf.cf_group_cpAttributes.cf_char_gpsLongitude[0]!==undefined){
+	    	 	resources.push({
+				'id':elm.entityId,
+	    	 	'name':elm.representationName,
+	    	 	'address':elm.source.cf.cf_group_cpAttributes.cf_char_address[0],
+	    	 	'type':elm.source.cf.cf_group_cpAttributes.cf_char_stationType[0],
+	    	 	'lat':elm.source.cf.cf_group_cpAttributes.cf_char_gpsLatitude[0],
+	    	 	'lng':elm.source.cf.cf_group_cpAttributes.cf_char_gpsLongitude[0],
+	    	 	'count':elm.source.cf.cf_group_cpAttributes.cf_char_slotsCount[0]
+	    	    });
+    	 	}
+    	 	else{
+    	 		error_resources.push({
+    	 			'id':elm.entityId,
+    	 			'name':elm.representationName,
+    	 			'address':elm.source.cf.cf_group_cpAttributes.cf_char_address[0]
+    	 		});
+    	 	}
+    	 });
+
+    	//var Ukraine = {lat: 50.47149085,lng: 30.54199219};
+    	var Ukraine = {lat: 48.87916715,lng: 32.84912109};
         var Kiev = {lat:50.45619254,lng:30.52310944};
 
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 11,
-          center: Kiev
+          zoom: 7,
+          center: Ukraine
         });
 
 		var iconBase = 'http://127.0.0.1:8080/markers/';
 		var icons = {
           fast: {
-            icon: iconBase + 'fast_charge.png'
+            icon: iconBase + 'orange.svg'
           },
           normal: {
-            icon: iconBase + 'normal_charge.png'
+            icon: iconBase + 'green.svg'
           },
           claster: {
-            icon: iconBase + 'normal_charge.png'
+            icon: iconBase + 'claster.png'
           }
         };
+        const iconOfTypeResource = function(type){
+        	if(type =='CHAdeMO')
+        		return icons.fast.icon;
+        	if(type == 'j-1772')
+        		return icons.normal.icon;
+        };
 
-        var features = [
-          {
-            position: new google.maps.LatLng(50.47389442, 30.4486084),
-            type: 'fast'
-          }, {
-            position: new google.maps.LatLng(50.45575538, 30.44517517),
-            type: 'fast'
-          }, {
-            position: new google.maps.LatLng(50.4599083, 30.41873932),
-            type: 'fast'
-          }, {
-            position: new google.maps.LatLng(50.4592526, 30.40431976),
-            type: 'fast'
-          }, {
-            position: new google.maps.LatLng(50.45837832, 30.39058685),
-            type: 'normal'
-          }, {
-            position: new google.maps.LatLng(50.44067063, 30.51898956),
-            type: 'normal'
-          }];
-         // Create markers.
-        features.forEach(function(feature) {
-          var marker = new google.maps.Marker({
-            position: feature.position,
-            icon: icons[feature.type].icon,
-            map: map
+        //  // Create markers.
+        // resources.forEach(function(feature) {
+        //   var marker = new google.maps.Marker({
+        //     position: new google.maps.LatLng(feature.lat,feature.lng),
+        //     icon: iconOfTypeResource(feature.type),
+        //     map: map
+        //   });
+        // });  
+        
+
+        var markers = resources.map(function(location) {
+          return new google.maps.Marker({
+            position:{lat:location.lat,lng:location.lng},
+            icon: iconOfTypeResource(location.type),
+            label:location.id
           });
-        });  
+        });
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: iconBase});
+
+
         // var marker = new google.maps.Marker({
         //   position: Kiev,
         //   map: map
