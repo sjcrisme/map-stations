@@ -246,7 +246,7 @@ function initMap() {
           center: Kiev
         });
 
-		var iconBase = 'https://127.0.0.1:8080/markers/';
+		var iconBase = 'http://127.0.0.1:8080/markers/';
 		var icons = {
           fast: {
             icon: iconBase + 'fast_charge.png'
@@ -283,7 +283,7 @@ function initMap() {
         features.forEach(function(feature) {
           var marker = new google.maps.Marker({
             position: feature.position,
-            //icon: icons[feature.type].icon,
+            icon: icons[feature.type].icon,
             map: map
           });
         });  

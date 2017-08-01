@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server",
+    "dev": "webpack-dev-server --hot --progress --colors --host 127.0.0.1 --port 8080",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
