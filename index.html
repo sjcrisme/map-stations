@@ -1,13 +1,27 @@
 <html>
   <head>
+  <style>
+  #map {
+    height: 100%;
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>
   </head>
   <body>
     <p class="container">
       Hello webpack 2
     </p>
+    <div id="map"></div>
     <div id="resources"></div> 
     <ul id="list"></ul>
-
-    <script src="./dist/app.b.js"></script>
+<script type="text/javascript" src="./dist/app.b.js"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpmmzzloyP1sA1fYyHBioRZbeRu18q6q0&&language=ua&region=ua&callback=initMap">
+    </script>
+   
   </body>
 </html>

@@ -27,6 +27,7 @@ function request(obj,done) {
     };
     xhr.send(obj.body);
 }
+
 //JSON.parse(data)
 
 // const makeRequest = async () => {
@@ -155,6 +156,7 @@ request({
 */
 
 // chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
+//chromium-browser --disable-web-security --user-data-dir
 const keyLoginUrl  = 'https://ecs-xm.icthh.com/cxf/xm-security-rs-api/v1/auth/login';
 const resourcesUrl = 'https://ecs-xm.icthh.com/cxf/xm-search-rs-api/v1/search';
 
@@ -204,7 +206,7 @@ const resourceJson = {
 }
 
 
- const makeAsyncRequest  = async () => {
+const makeAsyncRequest  = async () => {
  	try{
  		let accessToken;
  		let dataLogin = await oldxhr({
@@ -232,6 +234,63 @@ const resourceJson = {
  	}
  }
 
-makeAsyncRequest().then(function(data){
-	console.log(data);
-});
+function initMap() {
+    makeAsyncRequest().then(function(data){ 
+    	console.log(data);
+
+    	var Ukraine = {lat: 50.47149085,lng: 30.54199219};
+        var Kiev = {lat:50.45619254,lng:30.52310944};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11,
+          center: Kiev
+        });
+
+		var iconBase = 'https://127.0.0.1:8080/markers/';
+		var icons = {
+          fast: {
+            icon: iconBase + 'fast_charge.png'
+          },
+          normal: {
+            icon: iconBase + 'normal_charge.png'
+          },
+          claster: {
+            icon: iconBase + 'normal_charge.png'
+          }
+        };
+
+        var features = [
+          {
+            position: new google.maps.LatLng(50.47389442, 30.4486084),
+            type: 'fast'
+          }, {
+            position: new google.maps.LatLng(50.45575538, 30.44517517),
+            type: 'fast'
+          }, {
+            position: new google.maps.LatLng(50.4599083, 30.41873932),
+            type: 'fast'
+          }, {
+            position: new google.maps.LatLng(50.4592526, 30.40431976),
+            type: 'fast'
+          }, {
+            position: new google.maps.LatLng(50.45837832, 30.39058685),
+            type: 'normal'
+          }, {
+            position: new google.maps.LatLng(50.44067063, 30.51898956),
+            type: 'normal'
+          }];
+         // Create markers.
+        features.forEach(function(feature) {
+          var marker = new google.maps.Marker({
+            position: feature.position,
+            //icon: icons[feature.type].icon,
+            map: map
+          });
+        });  
+        // var marker = new google.maps.Marker({
+        //   position: Kiev,
+        //   map: map
+        // });
+    });
+}
+window.initMap = initMap;
