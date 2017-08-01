@@ -51,13 +51,6 @@ function request(obj,done) {
  
 // }
 
-
-// makeRequest().then((result) => {
-// 	console.log("then");
-// });
-
-
-
 /*
 function print(data){
 	//console.log(data);
@@ -226,7 +219,6 @@ const makeAsyncRequest  = async () => {
 						  			},
 						  	body:JSON.stringify(resourceJson)
 						  });
- 		//console.log(JSON.parse(dataResources).entities);
  		return JSON.parse(dataResources).entities;
  	}
  	catch(e){
@@ -241,18 +233,29 @@ function initMap() {
     	var error_resources=[];
     	var markers =[];
 
-    	 data.map((elm)=>{
+		//var Ukraine = {lat: 50.47149085,lng: 30.54199219};
+    	var Ukraine = {lat: 48.87916715,lng: 32.84912109};
+        var Kiev = {lat:50.45619254,lng:30.52310944};
+
+        const iconOfTypeResource = function(type){
+        	if(type =='CHAdeMO')
+        		return icons.fast.icon;
+        	if(type == 'j-1772')
+        		return icons.normal.icon;
+        };
+
+    	data.map((elm) => {
     	 	if(elm.source.cf.cf_group_cpAttributes.cf_char_gpsLatitude[0]!==undefined ||
-    	 	 elm.source.cf.cf_group_cpAttributes.cf_char_gpsLongitude[0]!==undefined){
-	    	 	resources.push({
-				'id':elm.entityId,
-	    	 	'name':elm.representationName,
-	    	 	'address':elm.source.cf.cf_group_cpAttributes.cf_char_address[0],
-	    	 	'type':elm.source.cf.cf_group_cpAttributes.cf_char_stationType[0],
-	    	 	'lat':elm.source.cf.cf_group_cpAttributes.cf_char_gpsLatitude[0],
-	    	 	'lng':elm.source.cf.cf_group_cpAttributes.cf_char_gpsLongitude[0],
-	    	 	'count':elm.source.cf.cf_group_cpAttributes.cf_char_slotsCount[0]
-	    	    });
+    	 	 	elm.source.cf.cf_group_cpAttributes.cf_char_gpsLongitude[0]!==undefined){
+	    	 	  resources.push({
+					'id':elm.entityId,
+		    	 	'name':elm.representationName,
+		    	 	'address':elm.source.cf.cf_group_cpAttributes.cf_char_address[0],
+		    	 	'type':elm.source.cf.cf_group_cpAttributes.cf_char_stationType[0],
+		    	 	'lat':elm.source.cf.cf_group_cpAttributes.cf_char_gpsLatitude[0],
+		    	 	'lng':elm.source.cf.cf_group_cpAttributes.cf_char_gpsLongitude[0],
+		    	 	'count':elm.source.cf.cf_group_cpAttributes.cf_char_slotsCount[0]
+	    	      });
     	 	}
     	 	else{
     	 		error_resources.push({
@@ -261,11 +264,7 @@ function initMap() {
     	 			'address':elm.source.cf.cf_group_cpAttributes.cf_char_address[0]
     	 		});
     	 	}
-    	 });
-
-    	//var Ukraine = {lat: 50.47149085,lng: 30.54199219};
-    	var Ukraine = {lat: 48.87916715,lng: 32.84912109};
-        var Kiev = {lat:50.45619254,lng:30.52310944};
+    	});
 
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 7,
@@ -284,12 +283,6 @@ function initMap() {
             icon: iconBase + 'claster.png'
           }
         };
-        const iconOfTypeResource = function(type){
-        	if(type =='CHAdeMO')
-        		return icons.fast.icon;
-        	if(type == 'j-1772')
-        		return icons.normal.icon;
-        };
 
         //  // Create markers.
         // resources.forEach(function(feature) {
@@ -300,7 +293,6 @@ function initMap() {
         //   });
         // });  
         
-
         var markers = resources.map(function(location) {
           return new google.maps.Marker({
             position:{lat:location.lat,lng:location.lng},
@@ -312,12 +304,6 @@ function initMap() {
         // Add a marker clusterer to manage the markers.
         var markerCluster = new MarkerClusterer(map, markers,
             {imagePath: iconBase});
-
-
-        // var marker = new google.maps.Marker({
-        //   position: Kiev,
-        //   map: map
-        // });
     });
 }
 window.initMap = initMap;
