@@ -1,152 +1,8 @@
-// console.log("hello webpack ++");
-import _ from 'lodash';
+// import _ from 'lodash';
 //import css from './css/app.css';
 
-let a  = 'a';
-console.log('Hello webpack 2', _.isEqual(2,2));
-
-
-function request(obj,done) {
-    var xhr = new XMLHttpRequest();
-
-    xhr.open(obj.method || "GET", obj.url);
-    if (obj.headers) {
-        Object.keys(obj.headers).forEach(function(key) {
-            xhr.setRequestHeader(key, obj.headers[key]);
-        });
-    }
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-           done(xhr.response);
-        } else {
-            console.log(xhr.statusText);
-        }
-    };
-    xhr.onerror = function() {
-        console.log(xhr.statusText);
-    };
-    xhr.send(obj.body);
-}
-
-//JSON.parse(data)
-
-// const makeRequest = async () => {
-//  console.log( await request({
-//      url:"https://ecs-xm.icthh.com/cxf/xm-security-rs-api/v1/auth/login",
-//      method:"POST",
-//      headers:{
-//          'Content-Type':'application/json',
-//          'Access-Control-Allow-Origin':'*'
-//     },
-//      body:JSON.stringify({
-//          "credentials": {
-//              "user": "forwidget",
-//              "password": "forwidget" 
-//          }
-//       })
-//    },function(data){
-//    	console.log(">>");
-//    		console.log(data);
-//    } ));
- 
-// }
-
-/*
-function print(data){
-	//console.log(data);
-//	 var myDiv = document.getElementById("resources");
-	 //var myP = document.createElement("<p>");
-	// myP.appendChild(document.createTextNode(data.representationName));
-	 //myDiv.appendChild(document.createTextNode(data.representationName + ' '));
-
-	 // document.getElementById('resources')
-	 // .innerHTML = '<span >' + data.representationName +'</span><br>';
- var ul = document.getElementById("list");
-    var li = document.createElement("li");
-    var children = ul.children.length + 1
-    li.setAttribute("id", "element"+data.entityId)
-    li.appendChild(document.createTextNode(
-    '('+ data.representationName +')  '+ data.source.cf.cf_group_cpAttributes.cf_char_address[0]));
-    ul.appendChild(li);
-}
-
-function request(obj) {
-  return new Promise(function (resolve, reject) {
-    var xhr = new XMLHttpRequest();
-
-    xhr.open(obj.method || "GET", obj.url);
-    if (obj.headers) {
-        Object.keys(obj.headers).forEach(function(key) {
-            xhr.setRequestHeader(key, obj.headers[key]);
-        });
-    }
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-           resolve(xhr.response);
-        } else {
-            reject(xhr.statusText);
-        }
-    };
-    xhr.onerror = function() {
-        reject(xhr.statusText);
-    };
-    xhr.send(obj.body);
-  })
-}
-
-request({
-     url:"https://ecs-xm.icthh.com/cxf/xm-security-rs-api/v1/auth/login",
-     method:"POST",
-     headers:{
-         'Content-Type':'application/json',
-         'Access-Control-Allow-Origin':'*'
-    },
-     body:JSON.stringify({
-         "credentials": {
-             "user": "forwidget",
-             "password": "forwidget" 
-         }
-      })
-})
-.then(function (datums) {
-  var accessToken = JSON.parse(datums).accessToken;
-
-  request({
-     url:"https://ecs-xm.icthh.com/cxf/xm-search-rs-api/v1/search",
-     method:"POST",
-     headers:{
-     	 'XM-CLIENT-ACCESSTOKEN':accessToken,
-         'Content-Type':'application/json',
-         'Access-Control-Allow-Origin':'*'
-    },
-     body:JSON.stringify({  
-		   "entries":[  
-		      {  
-		         "key":{  
-		            "entityType":{"name":"RESOURCE_ENTITY"}
-		         },
-		         "value":"rd_r_type_code:PHYSICAL_ATOMIC_CP AND entity_state:AVAILABLE" 
-		      }
-		   ],
-		   "pagination":{  
-		      "offset":0,
-		      "limit":1000
-		   }
-  		})
-	}).then(function(data){
-		console.log( JSON.parse(data).entities);
-		_.map(JSON.parse(data).entities, print);
-		// return JSON.parse(data).entities;
-
-	}).catch(function(err){
-		console.error('Augh, there was an error with getting resourcess!', err.statusText);
-	});
-
-})
-.catch(function (err) {
-  console.error('Augh, there was an error with getting accessToken!', err.statusText);
-});
-*/
+// let a  = 'a';
+// console.log('Hello webpack 2', _.isEqual(2,2));
 
 // chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
 //chromium-browser --disable-web-security --user-data-dir
@@ -243,6 +99,12 @@ function initMap() {
         	if(type == 'j-1772')
         		return icons.normal.icon;
         };
+        const textTypeResource = function(type){
+        	if(type =='CHAdeMO')
+        		return 'швидка';
+        	if(type == 'j-1772')
+        		return 'типова';
+        };
 
     	data.map((elm) => {
     	 	if(elm.source.cf.cf_group_cpAttributes.cf_char_gpsLatitude[0]!==undefined ||
@@ -271,18 +133,18 @@ function initMap() {
           center: Ukraine
         });
 
-		var iconBase = 'http://127.0.0.1:8080/markers/';
-		var icons = {
-          fast: {
-            icon: iconBase + 'orange.svg'
-          },
-          normal: {
-            icon: iconBase + 'green.svg'
-          },
-          claster: {
-            icon: iconBase + 'claster.png'
-          }
-        };
+				var iconBase = 'http://127.0.0.1:8080/markers/';
+				var icons = {
+		          fast: {
+		            icon: iconBase + 'orange.svg'
+		          },
+		          normal: {
+		            icon: iconBase + 'green.svg'
+		          },
+		          claster: {
+		            icon: iconBase + 'claster.png'
+		          }
+		        };
 
         //  // Create markers.
         // resources.forEach(function(feature) {
@@ -292,18 +154,30 @@ function initMap() {
         //     map: map
         //   });
         // });  
+        var infoWindow = new google.maps.InfoWindow();
         
         var markers = resources.map(function(location) {
-          return new google.maps.Marker({
-            position:{lat:location.lat,lng:location.lng},
-            icon: iconOfTypeResource(location.type),
-            label:location.id
-          });
+          let point =  new google.maps.Marker({
+	            position:{lat:location.lat,lng:location.lng},
+	            icon: iconOfTypeResource(location.type)
+	            // label:location.id
+	          });
+          let infowindow = new google.maps.InfoWindow({
+    					content: '<div><b>' + location.name + '</b></div>' +
+    										'<p>' + location.address + '</p>' +
+    										'<p><b>тип станцii:</b> ' + textTypeResource(location.type) + '</p>'
+  		  	});
+          point.addListener('click', function() {
+    					infowindow.open(map, point);
+  				});
+
+          return point;
         });
 
         // Add a marker clusterer to manage the markers.
         var markerCluster = new MarkerClusterer(map, markers,
             {imagePath: iconBase});
+
     });
 }
 window.initMap = initMap;
