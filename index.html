@@ -16,7 +16,6 @@
   }
   #goCenterUI, #setCenterUI, #allCenterUI {
     background-color: #fff;
-    border: 2px solid #fff;
     border-radius: 3px;
     box-shadow: 0 2px 6px rgba(0,0,0,.3);
     cursor: pointer;
@@ -33,6 +32,9 @@
     padding-left: 5px;
     padding-right: 5px;
   }
+  .active{
+    background-color:#008CFF;
+  }
 </style>
 <link rel="stylesheet" href="css/app.css"/>
   </head>
@@ -41,7 +43,8 @@
     <div id="resources"></div> 
     <ul id="list"></ul>
 <script type="text/javascript" src="./dist/app.b.js"></script>
-<script type="text/javascript" src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script type="text/javascript" src="./src/markerclusterer.js"></script>
+<!--<script type="text/javascript" src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>-->
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpmmzzloyP1sA1fYyHBioRZbeRu18q6q0&&language=ua&region=ua&callback=initMap">
    </script>
