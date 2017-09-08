@@ -10,6 +10,9 @@ var filters = [false,false,false];
 var keyLoginUrl  = 'https://ecs-xm.icthh.com/cxf/xm-security-rs-api/v1/auth/login';
 var resourcesUrl = 'https://ecs-xm.icthh.com/cxf/xm-search-rs-api/v1/search';
 
+var ObjInfowindow = [];
+var activeInfoWindow;
+
 var loginJson = {"credentials": {
 		             "user": "forwidget",
 		             "password": "forwidget" 
@@ -26,6 +29,7 @@ var resourceJson = {"entries":[{
   		   }
     		};
 var Ukraine = {lat: 48.87916715,lng: 32.84912109};
+var kiev    = {lat:50.431782, lng:30.516382};
 var iconBase = 'gmarkers/';
 var icons = {
 			fast: {
@@ -38,6 +42,35 @@ var icons = {
 				icon: iconBase + 'claster.png'
 			}
 		};
+var Cityes = [
+	{"name":"Cherkaska oblast"},
+	{"name":"Chernihivska oblast"},
+	{"name":"Chernivetska oblast"},
+	{"name":"Dnipropetrovska oblast"},
+	{"name":"Donetska oblast"},
+	{"name":"Ivano-Frankivska oblast"},
+	{"name":"Kharkivska oblast"},
+	{"name":"Khersonska oblast"},
+	{"name":"Khmelnytska oblast"},
+	{"name":"Kirovohradska oblast"},
+	{"name":"Kyivska oblast"},
+	{"name":"Luhanska oblast"},
+	{"name":"Lvivska oblast	"},
+	{"name":"Mykolaivska oblast"},
+	{"name":"Odeska oblast"},
+	{"name":"Poltavska oblast"},
+	{"name":"Rivnenska oblast"},
+	{"name":"Sumska oblast"},
+	{"name":"Ternopilska oblast"},
+	{"name":"Vinnytska oblast"},
+	{"name":"Volynska oblast"},
+	{"name":"Zakarpatska oblast"},
+	{"name":"Zaporizka oblast"},
+	{"name":"Zhytomyrska oblast"},
+	{"name":"Avtonomna Respublika Krym"},
+	{"name":"Kyiv"},
+	{"name":"Sevastopol"}
+];
 
 // var icons = {
 // 	fast:{//#f98c34 orange  .   #0091ea; blue bizzy ; 43a047 green -free
@@ -140,7 +173,26 @@ function hasOwnProperties(target, path, value){
 		return true;
 	}
 }
+function CetLegengs(controlDiv, map){
+	var control = this;
+	var element = document.getElementById('ico-map');
 
+	controlDiv.style.clear = 'both';
+
+	var legendsUI = document.createElement('div');
+	legendsUI.id = 'legendsUI';
+	legendsUI.title = 'Legend of map';
+	controlDiv.appendChild(legendsUI);
+	// Set CSS for the control interior
+
+	var legendText = document.createElement('div');
+	legendText.id = 'allCenterText';
+	legendText.className = " mapLegends ";
+	legendText.innerHTML = element.innerHTML;
+	/*
+	*/
+	legendsUI.appendChild(legendText);
+}
 function CenterControl(controlDiv, map, resources,filters) {
 	var control = this;
 	controlDiv.style.clear = 'both';
@@ -181,6 +233,19 @@ function CenterControl(controlDiv, map, resources,filters) {
 	setCenterText.className = (filters[2])? "mapFilterButtons active" : " mapFilterButtons ";
 	setCenterText.innerHTML = 'Fast charges CHAdeMO';
 	setCenterUI.appendChild(setCenterText);
+
+	// Set CSS for the control interior
+//
+	// var legendsUI = document.createElement('div');
+	// legendsUI.id = 'legendsUI';
+	// legendsUI.title = 'Click to show all charges';
+	// controlDiv.appendChild(legendsUI);
+	// // Set CSS for the control interior
+	// var legendText = document.createElement('div');
+	// legendText.id = 'allCenterText';
+	// legendText.className = " mapLegends ";
+	// legendText.innerHTML = 'LEGENDS';
+	// legendsUI.appendChild(legendText);
 
 	allCenterUI.addEventListener('click', function() {
 
@@ -249,27 +314,62 @@ function validatePreparedData(tempresursec){
 				}
 	} //end for	
 }
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+	infoWindow.setPosition(pos);
+	infoWindow.setContent(browserHasGeolocation ?
+							'Error: The Geolocation service failed.' :
+							'Error: Your browser doesn\'t support geolocation.');
+}
+
+function getOblast(results)
+{
+    for (var i = 0; i < results[0].address_components.length; i++)
+    {
+        var shortname = results[0].address_components[i].short_name;
+        var longname = results[0].address_components[i].long_name;
+        var type = results[0].address_components[i].types;
+        if (type.indexOf("administrative_area_level_1") != -1)
+        {
+			//Cityes. type.match()
+            if (!isNullOrWhitespace(shortname))
+            {
+                return shortname;
+            }
+            else
+            {
+                return longname;
+            }
+        }
+    }
+}
+
+function isNullOrWhitespace(text) {
+    if (text == null) {
+        return true;
+    }
+    return text.replace(/\s/gi, '').length < 1;
+}
 
 function mapDataInit(map,filters){
-	var Symbol=function(id,width,height,fill){
-		var s={ 
-		heart:  {
-					p:'M340.8,83C307,83,276,98.8,256,124.8c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6 L245.1,418l10.9,11l10.9-11l148.3-149.8c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z',
-					v:'0 0 512 512'
-				},
-		gear:   {
-					p:'M462,280.72v-49.44l-46.414-16.48c-3.903-15.098-9.922-29.343-17.675-42.447l0.063-0.064l21.168-44.473l-34.96-34.96 l-44.471,21.167l-0.064,0.064c-13.104-7.753-27.352-13.772-42.447-17.673L280.72,50h-49.44L214.8,96.415 c-15.096,3.9-29.343,9.919-42.447,17.675l-0.064-0.066l-44.473-21.167l-34.96,34.96l21.167,44.473l0.066,0.064 c-7.755,13.104-13.774,27.352-17.675,42.447L50,231.28v49.44l46.415,16.48c3.9,15.096,9.921,29.343,17.675,42.447l-0.066,0.064 l-21.167,44.471l34.96,34.96l44.473-21.168l0.064-0.063c13.104,7.753,27.352,13.771,42.447,17.675L231.28,462h49.44l16.48-46.414 c15.096-3.903,29.343-9.922,42.447-17.675l0.064,0.063l44.471,21.168l34.96-34.96l-21.168-44.471l-0.063-0.064 c7.753-13.104,13.771-27.352,17.675-42.447L462,280.72z M256,338.4c-45.509,0-82.4-36.892-82.4-82.4c0-45.509,36.891-82.4,82.4-82.4 c45.509,0,82.4,36.891,82.4,82.4C338.4,301.509,301.509,338.4,256,338.4z',
-					v:'0 0 512 512'
-				},
-		vader:  {
-					p:'M 454.5779,419.82295 328.03631,394.69439 282.01503,515.21933 210.30518,407.97233 92.539234,460.65437 117.66778,334.11278 -2.8571457,288.09151 104.38984,216.38165 51.707798,98.615703 178.2494,123.74425 224.27067,3.2193247 295.98052,110.46631 413.74648,57.784277 388.61793,184.32587 509.14286,230.34714 401.89587,302.057 z',
-					v:'0 0 512 512'
-				}
-		}
-		//<path id="arc1" fill="none" stroke="green" stroke-width="20" />
-		return ('data:image/svg+xml;base64,'
-		+window.btoa('<svg xmlns="http://www.w3.org/2000/svg" height="'+height+'" viewBox="0 0 512 512" width="'+width+'" ><g><path fill="'+fill+'" d="'+s[id].p+'" /></g></svg>'));
-	}
+	// var Symbol=function(id,width,height,fill){
+	// 	var s={ 
+	// 	heart:  {
+	// 				p:'M340.8,83C307,83,276,98.8,256,124.8c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6 L245.1,418l10.9,11l10.9-11l148.3-149.8c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z',
+	// 				v:'0 0 512 512'
+	// 			},
+	// 	gear:   {
+	// 				p:'M462,280.72v-49.44l-46.414-16.48c-3.903-15.098-9.922-29.343-17.675-42.447l0.063-0.064l21.168-44.473l-34.96-34.96 l-44.471,21.167l-0.064,0.064c-13.104-7.753-27.352-13.772-42.447-17.673L280.72,50h-49.44L214.8,96.415 c-15.096,3.9-29.343,9.919-42.447,17.675l-0.064-0.066l-44.473-21.167l-34.96,34.96l21.167,44.473l0.066,0.064 c-7.755,13.104-13.774,27.352-17.675,42.447L50,231.28v49.44l46.415,16.48c3.9,15.096,9.921,29.343,17.675,42.447l-0.066,0.064 l-21.167,44.471l34.96,34.96l44.473-21.168l0.064-0.063c13.104,7.753,27.352,13.771,42.447,17.675L231.28,462h49.44l16.48-46.414 c15.096-3.903,29.343-9.922,42.447-17.675l0.064,0.063l44.471,21.168l34.96-34.96l-21.168-44.471l-0.063-0.064 c7.753-13.104,13.771-27.352,17.675-42.447L462,280.72z M256,338.4c-45.509,0-82.4-36.892-82.4-82.4c0-45.509,36.891-82.4,82.4-82.4 c45.509,0,82.4,36.891,82.4,82.4C338.4,301.509,301.509,338.4,256,338.4z',
+	// 				v:'0 0 512 512'
+	// 			},
+	// 	vader:  {
+	// 				p:'M 454.5779,419.82295 328.03631,394.69439 282.01503,515.21933 210.30518,407.97233 92.539234,460.65437 117.66778,334.11278 -2.8571457,288.09151 104.38984,216.38165 51.707798,98.615703 178.2494,123.74425 224.27067,3.2193247 295.98052,110.46631 413.74648,57.784277 388.61793,184.32587 509.14286,230.34714 401.89587,302.057 z',
+	// 				v:'0 0 512 512'
+	// 			}
+	// 	}
+	// 	//<path id="arc1" fill="none" stroke="green" stroke-width="20" />
+	// 	return ('data:image/svg+xml;base64,'
+	// 	+window.btoa('<svg xmlns="http://www.w3.org/2000/svg" height="'+height+'" viewBox="0 0 512 512" width="'+width+'" ><g><path fill="'+fill+'" d="'+s[id].p+'" /></g></svg>'));
+	// }
 
 	var centerControlDiv = document.createElement('div');
 	var centerControl = new CenterControl(centerControlDiv, map, resources,filters);
@@ -277,7 +377,46 @@ function mapDataInit(map,filters){
 	centerControlDiv.style['padding-top'] = '5px';
 	map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
 
-	var infoWindow = new google.maps.InfoWindow();
+	//CetLegengs
+	var legendControlDiv = document.createElement('div');
+	var legendsControl = new CetLegengs(legendControlDiv, map);
+	legendControlDiv.index = 1;
+	legendControlDiv.style['padding-top'] = '5px';
+	map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(legendControlDiv);
+	///
+
+	var infowindow = new google.maps.InfoWindow();
+
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+		var pos = {
+			lat: kiev.lat,//position.coords.latitude,
+			lng: kiev.lng//position.coords.longitude
+		};
+
+	//var latlng = new google.maps.LatLng(49.845238, 36.311062);
+	// var latlng = new google.maps.LatLng(kiev.lat, kiev.lng);
+	// var geocoder = new google.maps.Geocoder();
+    // geocoder.geocode({'latLng': latlng}, function(results, status) {
+    //         if (status == google.maps.GeocoderStatus.OK) {
+    //             if (results[0]) {
+    //                 var loc = getOblast(results);
+    //                 alert("location is::"+loc);
+    //             }
+    //         }
+    //     });
+
+		//infowindow.setPosition(pos);
+		map.setCenter(pos);
+		map.setZoom(12);
+		}, function() {
+		handleLocationError(true, infowindow, map.getCenter());
+		});
+	} else {
+		// Browser doesn't support Geolocation
+		handleLocationError(false, infoWindow, map.getCenter());
+	}
+
 	markers = resources.map(function(location) {
 		var point =  new google.maps.Marker({
 				position:{lat:location.lat,lng:location.lng},
@@ -285,16 +424,24 @@ function mapDataInit(map,filters){
 			//	icon: TypeResource(location.type,[icons.fast.icon, icons.normal.icon]),
 				category:TypeResource(location.type,['fast','normal']),
 				slots:location.slots
-				// label:location.id
 			});
 			
-		infoWindow = new google.maps.InfoWindow({
-				content: '<div><b>' + location.name + '</b></div>' +
-									'<p>' + location.address + '</p>' +
-									'<p><b>тип станцii:</b> ' + TypeResource(location.type,['CHAdeMO','j1772']) + '</p>'+'<p>' + location.slots.data + '</p>'
+		var infowindow = new google.maps.InfoWindow({
+				// content:'<div class="'+TypeResource(location.type,['charge-fast-ico','charge-normal-ico'])+'"><b>' + location.name + '</b> <div style="float:right;margin-bottom:0px;margin-left:15px;" >   <b>N'+location.id+'</b></div>' +
+				// 		'<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19.77,7.23L19.78,7.22L16.06,3.5L15,4.56L17.11,6.67C16.17,7.03 15.5,7.93 15.5,9A2.5,2.5 0 0,0 18,11.5C18.36,11.5 18.69,11.42 19,11.29V18.5A1,1 0 0,1 18,19.5A1,1 0 0,1 17,18.5V14A2,2 0 0,0 15,12H14V5A2,2 0 0,0 12,3H6A2,2 0 0,0 4,5V21H14V13.5H15.5V18.5A2.5,2.5 0 0,0 18,21A2.5,2.5 0 0,0 20.5,18.5V9C20.5,8.31 20.22,7.68 19.77,7.23M18,10A1,1 0 0,1 17,9A1,1 0 0,1 18,8A1,1 0 0,1 19,9A1,1 0 0,1 18,10M8,18V13.5H6L10,6V11H12L8,18Z" /></svg><span>'+TypeResource(location.type,['Быстрая','Обычная'])+' зарядка ('+location.type+')</span></p>'+
+				// 		'<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" /></svg><span>' + location.address + '</span></p>' +
+				// 		'</div>'
+				content:'<table class="'+TypeResource(location.type,['charge-fast-ico','charge-normal-ico'])+'"><tr><td colspan="2"><b>' + location.name + '</b> <div style="float:right;margin-bottom:0px;margin-left:15px;" ><b>N'+location.id+'</b></div></td></tr>'+
+						'<tr><td width="24"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19.77,7.23L19.78,7.22L16.06,3.5L15,4.56L17.11,6.67C16.17,7.03 15.5,7.93 15.5,9A2.5,2.5 0 0,0 18,11.5C18.36,11.5 18.69,11.42 19,11.29V18.5A1,1 0 0,1 18,19.5A1,1 0 0,1 17,18.5V14A2,2 0 0,0 15,12H14V5A2,2 0 0,0 12,3H6A2,2 0 0,0 4,5V21H14V13.5H15.5V18.5A2.5,2.5 0 0,0 18,21A2.5,2.5 0 0,0 20.5,18.5V9C20.5,8.31 20.22,7.68 19.77,7.23M18,10A1,1 0 0,1 17,9A1,1 0 0,1 18,8A1,1 0 0,1 19,9A1,1 0 0,1 18,10M8,18V13.5H6L10,6V11H12L8,18Z" /></svg></td><td class="left"><span>'+TypeResource(location.type,['Быстрая','Обычная'])+' зарядка ('+location.type+')</span></td></tr>'+
+						'<tr><td valign="top" width="24"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" /></svg></td><td class="left"><span>' + location.address + '</span></td></tr>'+
+				'</table>'
 		});
+		ObjInfowindow.push(infowindow);
+
 		point.addListener('click', function() {
-				infoWindow.open(map, point);
+				infowindow.open(map, point);
+				activeInfoWindow&&activeInfoWindow.close();
+  				activeInfoWindow = infowindow;
 		});
 		
 

@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <style>
+    body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    background-color: #fafafa;
+    }
+
+    .install-info, .html-code {
+    margin-top: 30px;
+    }
+    
+    .info-code {
+    direction: ltr;
+    box-sizing: border-box;
+    font-family: Menlo,Monaco,Andale Mono,Courier New,monospace;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 12px;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    background: #ededed;
+    height: auto;
+    border: none;
+    color: #727272;
+    width: 75% !important;
+}
+
+.container {
+    padding: 0 15px;
+    margin: 0 auto;
+    max-width: 1170px;
+    width: 90%;
+}
+
+#xm-ae-charge-map iframe {
+    /* -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); */
+    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+    </style>
+  </head>
+  <body>
+  
+<div class="container">
+  
+<script>
+ (function(d, s, id){
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(s); js.id = id;
+   js.src = "http://127.0.0.1:8080/dist/api.js";
+   fjs.parentNode.insertBefore(js, fjs);
+ }(document, "script", "xm-widget"));
+
+ window.xmWidgetInit = function() {
+  XM.Widgets.init("xm-ae-charge-map", {language: "en", background: "white"}, 2);
+ };
+</script>
+
+<div id="xm-ae-charge-map"></div>
+
+</body>
+</html>
+

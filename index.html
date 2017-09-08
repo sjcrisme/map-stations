@@ -9,11 +9,12 @@
   #map {
     height: 100%;
   }
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
+  /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
   #goCenterUI, #setCenterUI, #allCenterUI {
     background-color: #fff;
     border-radius: 3px;
@@ -35,6 +36,69 @@
   .active{
     background-color:#008CFF;
   }
+ .charge-fast-ico path{
+    fill:#F68930;
+  }
+  .charge-normal-ico path{
+    fill:#43A047;
+  }
+  .charge-normal-ico,.charge-fast-ico {
+     padding: 5px;
+     min-width: 180px;
+  }
+  .charge-normal-ico span,.charge-fast-ico span{
+    padding-right: 10px;
+    padding-left: 5px;
+    margin-left: -5px;
+    position: relative;
+    top: 3px;
+  }
+  .charge-normal-ico td.left,
+  .charge-fast-ico td.left{
+    width: 345px;
+    text-align: left;
+    margin-left: 3px;
+  }
+  .hide{
+    display: none;
+  }
+  #legendsUI{
+    display: inline-block;
+   position: relative;    
+  }
+  #legendsUI::before{
+   content: "";
+   display: block;
+   position: absolute;
+   z-index: -1;
+   width: 100%;
+   height: 100%;
+   border: 1px solid whitesmoke;
+   background-color: whitesmoke;
+   opacity: 0.7; 
+  }
+  .t_{
+    padding-right: 7px;
+  }
+/*
+div
+{
+   display: inline-block;
+   position: relative;    
+}
+div::before
+{
+   content: "";
+   display: block;
+   position: absolute;
+   z-index: -1;
+   width: 100%;
+   height: 100%;
+   background:red;
+   opacity: 0.5;
+
+}
+*/
 </style>
 <link rel="stylesheet" href="css/app.css"/>
   </head>
@@ -42,6 +106,22 @@
     <div id="map"></div>
     <div id="resources"></div> 
     <ul id="list"></ul>
+    <div id="ico-map" class="hide">
+      <table height="55px">
+        <tr>
+          <td class="i_"><img src="gmarkers/ic_car@2x-40x40.png" alt="" width="25" height="25"></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color: balck;">Доступная машина</p></td>
+          <td class="i_"><img src="gmarkers/ic_c_01@2x-40x57.png" alt="" width="25" height="35"></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color: balck;">CHAdeMO - скоростная зарядка </p></td>
+
+          <td class="i_"><img src="gmarkers/ic_j_03@2x-40x57.png" alt="" width="25" height="35"></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color:balck;">J1772 - обычная зарядка </p></td>
+
+          <td class="i_"><img src="gmarkers/ico-rb-40x40.png" alt="" width="25" height="25"></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color:balck;"> Кластер заправок</p></td>
+        </tr>
+      </table>
+  </div>
 <script type="text/javascript" src="./dist/app.b.js"></script>
 <script type="text/javascript" src="./src/markerclusterer.js"></script>
 <!--<script type="text/javascript" src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>-->

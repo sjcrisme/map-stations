@@ -1225,31 +1225,32 @@ function describeArc(x, y, radius, startAngle, endAngle){
 }
 
 function ClusterChargeIco(width,height,portCount,FreePorts){
-	var center={x:132,y:130};
+	var center={x:135,y:130};
   var r = 105;
+  var depth =37;
   
   var item = 360/portCount;
   var st = 0;
   var end  = ((portCount-FreePorts)*item)-5;
-  var whiteLine = 3;
+  var whiteLine = 4;
 
 
   if(end < 0 ){
     end = 0;
   }
 
-  var greenCircle = '<path fill="none" stroke-width="45" d="'+describeArc(center.x, center.y, r, end+whiteLine, 357)+'" stroke="green"/>';
-  var blueCircle = '<path fill="none" stroke-width="45" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="blue"/>';
+  var greenCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, end+whiteLine, 357)+'" stroke="#43a047"/>';
+  var blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#0091ea"/>';
 
   if(portCount==FreePorts){
-    greenCircle = '<path fill="none" stroke-width="45" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="green"/><path fill="none" stroke-width="45" d="'+describeArc(center.x, center.y, r, 300, 370)+'" stroke="green"/>';
+    greenCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#43a047"/><path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 300, 370)+'" stroke="#43a047"/>';
   }
   else{
     if(FreePorts == 0){
-      blueCircle = '<path fill="none" stroke-width="45" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="blue"/><path fill="none" stroke-width="45" d="'+describeArc(center.x, center.y, r, 350, 370)+'" stroke="blue"/>';
+      blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#0091ea"/><path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 350, 370)+'" stroke="#0091ea"/>';
     }
     else{
-      blueCircle = '<path fill="none" stroke-width="45" d="'+describeArc(center.x, center.y, r, 0, end)+'" stroke="blue"/>'
+      blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, end)+'" stroke="#0091ea"/>'
     }
   }
 
