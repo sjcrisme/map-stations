@@ -16,7 +16,7 @@
 (function () {
   "use strict";
 
-  function getSize(size) {
+    function getSize(size) {
     return ["980-90", "728-90", "720-300", "300-250", "250-250", "300-600", "240-400", "160-600"].indexOf(size) == -1 ? "720-300": size;
   }
 
@@ -43,7 +43,7 @@
     iframe.height = wSizeArr[1];
     iframe.scrolling = "no";
     iframe.style.border = "none";
-    iframe.src = 'https://kmck-xm.icthh.com/widget/blood/index.html' + createQuery(options);
+    iframe.src = 'https://kmck-xm.icthh.com/widget/blood/index.html' + "?lg=" +options.language;
     placeholder.innerHTML = "";
     placeholder.appendChild(iframe);
   }
@@ -61,10 +61,24 @@
       iframe.width = '100%';
       iframe.height = '100%';
     }
+    if(typeof options.dev != 'undefined'){
+      if(options.dev){
+        iframe.src = 'http://127.0.0.1:8080'; // dev
+      }
+      else{
+        iframe.src = 'http://127.0.0.1:8080';//prod
+      }
+    }
+    else{
+      iframe.src = 'http://127.0.0.1:8080'; //prod
+    }
+    
     iframe.scrolling = "no";
     iframe.style.border = "none";
-    iframe.src = 'http://127.0.0.1:8080';
+   // iframe.src = 'http://127.0.0.1:8080';
     placeholder.innerHTML = "";
+    iframe.setAttribute("lang", options.language);
+  // iframe.yourMethod('hello');
     //console.log(options);
     placeholder.appendChild(iframe);
   }

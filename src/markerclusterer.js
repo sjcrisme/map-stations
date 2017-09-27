@@ -1225,7 +1225,7 @@ function describeArc(x, y, radius, startAngle, endAngle){
 }
 
 function ClusterChargeIco(width,height,portCount,FreePorts){
-	var center={x:135,y:130};
+	var center={x:140,y:135};
   var r = 105;
   var depth =37;
   
@@ -1254,7 +1254,7 @@ function ClusterChargeIco(width,height,portCount,FreePorts){
     }
   }
 
-  var string = '<circle cx="'+center.x+'" cy="'+center.y+'" r="140" fill="white"/>' + blueCircle + greenCircle;
+  var string = '<circle cx="'+center.x+'" cy="'+center.y+'" r="137" fill="white"/>' + blueCircle + greenCircle;
 		return ('data:image/svg+xml;base64,'
 		+window.btoa('<svg xmlns="http://www.w3.org/2000/svg" height="'+height+'" viewBox="0 0 512 512" width="'+width+'" >'+string+'</svg>'));
 	}

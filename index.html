@@ -63,9 +63,10 @@
     display: none;
   }
   #legendsUI{
-    display: inline-block;
+   display: inline-block;
    position: relative;    
   }
+
   #legendsUI::before{
    content: "";
    display: block;
@@ -79,6 +80,17 @@
   }
   .t_{
     padding-right: 7px;
+    line-height: 12px;
+    font-size:13px;
+  }
+  .t_ p{
+    margin-top: 6px;
+  }
+  .i_ img{
+    margin-top: 5px;
+  }
+  .gmnoprint{
+    z-index: 100;
   }
 /*
 div
@@ -98,8 +110,90 @@ div::before
    opacity: 0.5;
 
 }
+
+"ALBUM":{
+    "TITEL":"album",
+    "LAAD_MEER":"Load more",
+    "ALBUMS":"Back to albums"
+  },
 */
 </style>
+</script>
+
+<script id="LangJson" type="application/json">
+        [
+            {"lang":"ru",
+                "content":{
+                    "langing":{
+                        "CAR":"Доступная машина",
+                        "FAST_CHARGE":"скоростная зарядка",
+                        "NORMAL_CHARGE":"обычная зарядка",
+                        "CLUSTER_OF_CHARGE":"Кластер заправок"
+                    },
+                    "zoom":{
+                        "ZOOM_IN":"Увеличить",
+                        "ZOOM_OUT":"Уменьшить"
+                    },
+                    "filter":{
+                        "ALL" : "Все"
+                    },
+                    "marker":{
+                        "M_FAST":"Быстрая зарядка",
+                        "M_NORMAL":"Обычная зарядка"
+                    }
+                }
+            },
+            {"lang":"uk",
+                "content":{
+                    "langing":{
+                        "CAR":"Доступна автівка",
+                        "FAST_CHARGE":"швидкісна зарядка",
+                        "NORMAL_CHARGE":"звичайна зарядка",
+                        "CLUSTER_OF_CHARGE":"Кластер зарядних станцій"
+                    },
+                    "zoom":{
+                        "ZOOM_IN":"Збільшити",
+                        "ZOOM_OUT":"Зменшити"
+                    },
+                    "filter":{
+                        "ALL" : "Усі"
+                    },
+                    "marker":{
+                        "M_FAST":"Швидкісна зарядка",
+                        "M_NORMAL":"Звичайна зарядка"
+                    }
+                }
+            },
+            {"lang":"en",
+                "content":{
+                    "langing":{
+                        "CAR":"Available car",
+                        "FAST_CHARGE":"fast charging",
+                        "NORMAL_CHARGE":"normal charging",
+                        "CLUSTER_OF_CHARGE":"Cluster of charging points"
+                    },
+                    "zoom":{
+                        "ZOOM_IN":"Zoom in",
+                        "ZOOM_OUT":"Zoom out"
+                    },
+                    "filter":{
+                        "ALL" : "All"
+                    },
+                    "marker":{
+                        "M_FAST":" Fast charging",
+                        "M_NORMAL":"Normal charging"
+                    }
+                }
+            }]
+    </script>
+<script type="text/javascript">
+(function() {
+/*  
+var script = document.getElementById('myurl');
+console.log();
+*/ 
+     })();
+</script>
 <link rel="stylesheet" href="css/app.css"/>
   </head>
   <body>
@@ -110,24 +204,46 @@ div::before
       <table height="55px">
         <tr>
           <td class="i_"><img src="gmarkers/ic_car@2x-40x40.png" alt="" width="25" height="25"></td>
-          <td class="t_"><p class="qodef-iwt-text" style="color: balck;">Доступная машина</p></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color: balck;">{CAR}</p></td>
           <td class="i_"><img src="gmarkers/ic_c_01@2x-40x57.png" alt="" width="25" height="35"></td>
-          <td class="t_"><p class="qodef-iwt-text" style="color: balck;">CHAdeMO - скоростная зарядка </p></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color: balck;">CHAdeMO - {FAST_CHARGE} </p></td>
 
           <td class="i_"><img src="gmarkers/ic_j_03@2x-40x57.png" alt="" width="25" height="35"></td>
-          <td class="t_"><p class="qodef-iwt-text" style="color:balck;">J1772 - обычная зарядка </p></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color:balck;">J1772 - {NORMAL_CHARGE}</p></td>
 
           <td class="i_"><img src="gmarkers/ico-rb-40x40.png" alt="" width="25" height="25"></td>
-          <td class="t_"><p class="qodef-iwt-text" style="color:balck;"> Кластер заправок</p></td>
+          <td class="t_"><p class="qodef-iwt-text" style="color:balck;"> {CLUSTER_OF_CHARGE}</p></td>
         </tr>
       </table>
   </div>
 <script type="text/javascript" src="./dist/app.b.js"></script>
 <script type="text/javascript" src="./src/markerclusterer.js"></script>
 <!--<script type="text/javascript" src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>-->
-<script async defer
+
+<script type="text/javascript">
+    //load map based on current lang
+    var scriptTag = document.createElement('script');
+    var currentLang = (window.frameElement)? window.frameElement.lang : "uk"; 
+    var JSONLANG = JSON.parse(document.getElementById('LangJson').innerHTML);
+    var foundlang = false;
+    for(var i=0;i<JSONLANG.length;i++){
+        if(JSONLANG[i].lang == currentLang){
+          foundlang = true;
+        }
+    }
+    if(!foundlang){
+      console.log("%c [warning] this widget don't have that lang:" + currentLang,"color:#FF6A00");
+      currentLang='uk';
+    }
+    var scriptSrc = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBpmmzzloyP1sA1fYyHBioRZbeRu18q6q0&&language='+currentLang +'&region='+currentLang+'&callback=initMap';
+    scriptTag.setAttribute('src', scriptSrc);
+    scriptTag.setAttribute('async', '');
+    document.head.appendChild(scriptTag);
+</script>
+
+<!--<script id="myurl" async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpmmzzloyP1sA1fYyHBioRZbeRu18q6q0&&language=ua&region=ua&callback=initMap">
-   </script>
+   </script> -->
 <!-- server
   <script async defer
         src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyD7kwRwkcME6YaK1qOpt_KesaX_4hBnbhE&language=ua&region=ua&callback=initMap">
