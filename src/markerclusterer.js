@@ -1225,40 +1225,47 @@ function describeArc(x, y, radius, startAngle, endAngle){
 }
 
 function ClusterChargeIco(width,height,portCount,FreePorts){
-	var center={x:140,y:135};
+  var center={x:140,y:135};
   var r = 105;
   var depth =37;
-  
-  var item = 360/portCount;
-  var st = 0;
-  var end  = ((portCount-FreePorts)*item)-5;
-  var whiteLine = 4;
+
+  if (!isNaN(FreePorts)) {
+    var item = 360/portCount;
+    var st = 0;
+    var end  = ((portCount-FreePorts)*item)-5;
+    var whiteLine = 4;
 
 
-  if(end < 0 ){
-    end = 0;
-  }
+    if(end < 0 ){
+      end = 0;
+    }
 
-  var greenCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, end+whiteLine, 357)+'" stroke="#43a047"/>';
-  var blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#0091ea"/>';
+    var greenCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, end+whiteLine, 357)+'" stroke="#43a047"/>';
+    var blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#0091ea"/>';
 
-  if(portCount==FreePorts){
-    greenCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#43a047"/><path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 300, 370)+'" stroke="#43a047"/>';
-  }
-  else{
-    if(FreePorts == 0){
-      blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#0091ea"/><path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 350, 370)+'" stroke="#0091ea"/>';
+    if(portCount==FreePorts){
+      greenCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#43a047"/><path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 300, 370)+'" stroke="#43a047"/>';
     }
     else{
-      blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, end)+'" stroke="#0091ea"/>'
+      if(FreePorts == 0){
+        blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, 350)+'" stroke="#0091ea"/><path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 350, 370)+'" stroke="#0091ea"/>';
+      }
+      else{
+        blueCircle = '<path fill="none" stroke-width="'+depth+'" d="'+describeArc(center.x, center.y, r, 0, end)+'" stroke="#0091ea"/>'
+      }
     }
+
+    var string = '<circle cx="'+center.x+'" cy="'+center.y+'" r="137" fill="white"/>' + blueCircle + greenCircle;
+      return ('data:image/svg+xml;base64,'
+      +window.btoa('<svg xmlns="http://www.w3.org/2000/svg" height="'+height+'" viewBox="0 0 512 512" width="'+width+'" >'+string+'</svg>'));
   }
-
-  var string = '<circle cx="'+center.x+'" cy="'+center.y+'" r="137" fill="white"/>' + blueCircle + greenCircle;
-		return ('data:image/svg+xml;base64,'
-		+window.btoa('<svg xmlns="http://www.w3.org/2000/svg" height="'+height+'" viewBox="0 0 512 512" width="'+width+'" >'+string+'</svg>'));
-	}
-
+  else {
+    var string = '<circle cx="'+center.x+'" cy="'+center.y+'" r="137" fill="white"/><circle cx="'+center.x+'" cy="'+center.y+'" r="120" fill="#61BF2E"/>' 
+    return ('data:image/svg+xml;base64,'
+    +window.btoa('<svg xmlns="http://www.w3.org/2000/svg" height="'+height+'" viewBox="0 0 512 512" width="'+width+'" >'+string+'</svg>'));
+  } 
+  
+}
 /**
  * Create the css text based on the position of the icon.
  *
