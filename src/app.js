@@ -6,8 +6,8 @@
 var resources = [];
 var markers  = [];
 var error_resources = [];
-
-var filters = [false,false,false];
+//				All /normal /fast/OnlyCars/onlyCarges/
+var filters = [false,false,false,false, false];
 var UrlResources = "https://ecs-xm.test.icthh.com/cxf/xm-widgets-api/v0.1/widgets/AeChargePointWidget/content-records";
 var UrlCars = 'https://ecs-xm.test.icthh.com/cxf/xm-widgets-api/v0.1/widgets/AeElectricVehicleWidget/content-records';
 
@@ -100,8 +100,8 @@ function hasOwnProperties(target, path, value) {
 function CetLegengs(controlDiv, map){
 	var control = this;
 	var element = document.getElementById('ico-map');
-	
 	var table = element.innerHTML;
+
 	for(var i=0;i<JSONLANG.length;i++){
 		if(JSONLANG[i].lang ==LANG){
 			table = table.replace("{CAR}", JSONLANG[i].content.langing.CAR);
@@ -112,83 +112,79 @@ function CetLegengs(controlDiv, map){
 	}
 
 	controlDiv.style.clear = 'both';
-	var legendsUI = document.createElement('div');
-	legendsUI.id = 'legendsUI';
-	legendsUI.title = 'Legend of map';
-	controlDiv.appendChild(legendsUI);
-	// Set CSS for the control interior
-
-	var legendText = document.createElement('div');
-	legendText.id = 'allCenterText';
-	legendText.className = " mapLegends ";
-	legendText.innerHTML = table ;
-	/*
-	*/
-	legendsUI.appendChild(legendText);
+	controlDiv.appendChild( createControllElement('legendsUI', 'legendText', table, filters[0], function(){}, " mapLegends "));
 }
 
 function CenterControl(controlDiv, map, resources,filters) {
 	var control = this;
+	var TranslatedUrl = [];
 	controlDiv.style.clear = 'both';
 
-	var allCenterUI = document.createElement('div');
-	allCenterUI.id = 'allCenterUI';
-	allCenterUI.title = 'Click to show all charges';
-	controlDiv.appendChild(allCenterUI);
-	// Set CSS for the control interior
-	var allCenterText = document.createElement('div');
-	allCenterText.id = 'allCenterText';
-	allCenterText.className = (filters[0])? "mapFilterButtons active" : " mapFilterButtons ";
-
 	for(var i=0;i<JSONLANG.length;i++){
-			if(JSONLANG[i].lang == LANG){
-				allCenterText.innerHTML = JSONLANG[i].content.filter.ALL;
-			}
+		if(JSONLANG[i].lang == LANG){
+			TranslatedUrl['ALL'] = JSONLANG[i].content.filter.ALL;
+			TranslatedUrl['ONLY_CHARGES'] = JSONLANG[i].content.filter.ONLY_CHARGES;
+			TranslatedUrl['ELECTROCARS'] = JSONLANG[i].content.filter.ELECTROCARS;
+		}
 	}
-	allCenterUI.appendChild(allCenterText);
-
 
 	// Set CSS for the control border
-	var goCenterUI = document.createElement('div');
-	goCenterUI.id = 'goCenterUI';
-	goCenterUI.title = 'Click to to change for normal charges J1772';
-	controlDiv.appendChild(goCenterUI);
-	// Set CSS for the control interior
-	var goCenterText = document.createElement('div');
-	goCenterText.id = 'goCenterText';
-	goCenterText.className = (filters[1])? "mapFilterButtons active" : " mapFilterButtons ";
-	goCenterText.innerHTML = 'J1772';
-	goCenterUI.appendChild(goCenterText);
-
-	// Set CSS for the setCenter control border
-	var setCenterUI = document.createElement('div');
-	setCenterUI.id = 'setCenterUI';
-	setCenterUI.title = 'Click to change for fast charges CHAdeMO';
-	controlDiv.appendChild(setCenterUI);
-
-	// Set CSS for the control interior
-	var setCenterText = document.createElement('div');
-	setCenterText.id = 'setCenterText';
-	setCenterText.className = (filters[2])? "mapFilterButtons active" : " mapFilterButtons ";
-	setCenterText.innerHTML = 'CHAdeMO';
-	setCenterUI.appendChild(setCenterText);
-
-	// Set CSS for the control interior
-
-	allCenterUI.addEventListener('click', function() {
-		filters = [true,false,false];
+	controlDiv.appendChild( createControllElement('allCenterUI','allCenterText',TranslatedUrl['ALL'],filters[0],function(){
+			//		All /normal /fast/OnlyCars/onlyCarges/
+		filters = [true,false,false,false,false];
+		//	filters = [false,true,false];
 		resendRequest('all',filters);
-	});
-
-	goCenterUI.addEventListener('click', function() {
-		filters = [false,true,false];
+		console.log('All');
+		}) 
+	);
+	controlDiv.appendChild( createControllElement('setOnlyChargesUI','setOnlyChargesText',TranslatedUrl['ONLY_CHARGES'],filters[4],function(){
+		//  		All /normal /fast/OnlyCars/onlyCarges/
+		filters = [false,false,false,false,true];
+		resendRequest('olyCharges',filters);
+		console.log('Only carge stations');
+		}) 
+	);
+	controlDiv.appendChild( createControllElement('goCenterUi','goCenterText','J1772',filters[1],function(){
+		//  		All /normal /fast/OnlyCars/onlyCarges/
+		filters = [false,true,false,false,false];
 		resendRequest('normal',filters);
-	});
-
-	setCenterUI.addEventListener('click', function() {
-		filters = [false,false ,true];
+		console.log('normal');
+		}) 
+	);
+	controlDiv.appendChild( createControllElement('setCenterUI','setCenterText','CHAdeMO',filters[2],function(){
+		//  		All /normal /fast/OnlyCars/onlyCarges/
+		filters = [false,false,true,false,false];
 		resendRequest('fast',filters);
+		console.log('fast');
+		}) 
+	);
+	controlDiv.appendChild( createControllElement('setCarUI','setCarText',TranslatedUrl['ELECTROCARS'],filters[3],function(){
+		//  		All /normal /fast/OnlyCars/onlyCarges/
+		filters = [false,false,false,true,false];
+		resendRequest('cars',filters);
+		console.log('cars');
+		}) 
+	);
+}
+
+function createControllElement(divID,divName,translText,filterItem,EventClick){
+	var element = document.createElement('div');
+	element.id = divID;
+	// controlDiv.appendChild(setOnlyChargesUI);
+	var elementText = document.createElement('div');
+	elementText.id = divName;
+	if(arguments.length == 5){
+		elementText.className = (filterItem)? "mapFilterButtons active" : " mapFilterButtons ";
+	}
+	else{
+		elementText.className = arguments[6];
+	}
+	elementText.innerHTML = translText;
+	element.appendChild(elementText);
+	element.addEventListener('click', function() {
+		EventClick();
 	});
+	return element; 
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -284,7 +280,7 @@ if(arguments.length == 2){
 					var infowindow = new google.maps.InfoWindow({
 							content:'<table class="car-locattion"><tr><td colspan="2"><b>'+ location.registrationNumber + '</b></td></tr>' + 
 									'<tr><td colspan="2"><b>' + location.name + '</b> <div style="float:right;margin-bottom:0px;margin-left:15px;" ></div></td></tr>'+
-									'<tr><td colspan="2"><b>' + location.color + '</b> <div style="float:right;margin-bottom:0px;margin-left:15px;" ><b>N'+location.id+'</b></div></td></tr>'+
+									'<tr><td colspan="2">'+JSONLANG[i].content.marker.M_COLOR + ' : ' + JSONLANG[i].content.marker[location.color] + '<div style="float:right;margin-bottom:0px;margin-left:15px;" ><br><b>ID'+location.id+'</b></div></td></tr>'+
 									'<tr><td colspan="2"><span>' + location.address + '</span></td></tr>'+
 							'</table>'
 					});
@@ -308,26 +304,24 @@ if(arguments.length == 2){
 	});
 
 	 MarkerClusterer.prototype.setCalculator(function(markers, numStyles) {
-            var count = 0;
-			var buzy = 0;
-		if ( markers[0].category != 'car') {
-            for (var i=0;i<markers.length;i++) {
-                count += markers[i].slots.length;
+		var count = 0;
+		var buzy = 0;
+		for (var i = 0; i < markers.length; i++) {
+			if(markers[i].category != 'car') {
+				count += markers[i].slots.length;
 				buzy += markers[i].slots.length - markers[i].slots.freeSlot;
-            }
-
-            return {
-				buzy:buzy,
-                text: count,
-                index: 1
-			};
-		}
-		else {
-			return {
-				text:markers.length,
-				index:1
+			}
+			else{
+				count = markers.length;
+				buzy = 0/0;
 			}
 		}
+
+		return {
+			buzy: buzy,
+			text: count,
+			index: 1
+		};
     });
 	// Add a marker clusterer to manage the markers.
 		var markerCluster = new MarkerClusterer(map, markers,{styles: [{url: 'gmarkers/2.png', height: 40, width: 40, textSize: 12}]});
@@ -394,7 +388,7 @@ function addZoomTranslate(map){
 }
 
 function resendRequest(search,filters,map){
-	//error_resources =[];
+	
 	var filterstation = "{}";
 
 	var map = new google.maps.Map(document.getElementById('map'), {zoom: 7, center: kiev, zoomControl: true,mapTypeControl: false, scrollwheel: false,language:"fr"});
@@ -409,6 +403,10 @@ function resendRequest(search,filters,map){
 	if(search == 'all'){
 		filterstation = "{}";
 	}
+	if(search == 'olyCharges'){
+		filterstation = "{}";
+	}
+	if(search != 'cars'){
 
 	request({
 			url:UrlResources,
@@ -425,6 +423,9 @@ function resendRequest(search,filters,map){
 			function(error){
 				console.log(error);
 			});
+	}
+
+	if(search != 'olyCharges'){			
 	request({
 		url:UrlCars,
 		method:"POST",
@@ -447,13 +448,21 @@ function resendRequest(search,filters,map){
 
 			cars.push(singleCar);
 			validateData(cars);
-			mapDataInit(map,filters,'cars');
+			if(search != 'cars'){
+				mapDataInit(map,filters,'cars');
+			}
+			else{
+				mapDataInit(map,filters);
+			}
 		//	resursec = resursec.concat(cars);
 		},function(error){});
+	}
 }
 
 function initMap() {
-	filters = [true,false,false];
+//	filters = [true,false,false];
+//  		All /normal /fast/OnlyCars/onlyCarges/
+filters = [false,false,false,false,true];
 	var map = new google.maps.Map(document.getElementById('map'), {zoom: 7, center: kiev, zoomControl: true,mapTypeControl: false,scrollwheel: false });
 
 	resendRequest('all',filters,map);

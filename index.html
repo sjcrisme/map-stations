@@ -15,7 +15,7 @@
       margin: 0;
       padding: 0;
     }
-  #goCenterUI, #setCenterUI, #allCenterUI {
+  #goCenterUI, #setCenterUI, #allCenterUI, #setCarUI, #setOnlyChargesUI {
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0 2px 6px rgba(0,0,0,.3);
@@ -25,7 +25,7 @@
     text-align: center;
     margin-left: 2px;
   }
-  #goCenterText, #setCenterText, #allCenterText {
+  #goCenterText, #setCenterText, #allCenterText, #setCarText, #setOnlyChargesText {
     color: rgb(25,25,25);
     font-family: Roboto,Arial,sans-serif;
     font-size: 15px;
@@ -135,11 +135,22 @@ div::before
                         "ZOOM_OUT":"Уменьшить"
                     },
                     "filter":{
-                        "ALL" : "Все"
+                        "ALL" : "Все",
+                        "ONLY_CHARGES":"Только электрозаправки",
+                        "ELECTROCARS":"Электромобили"
                     },
                     "marker":{
                         "M_FAST":"Быстрая зарядка",
-                        "M_NORMAL":"Обычная зарядка"
+                        "M_NORMAL":"Обычная зарядка",
+                        "M_COLOR" : "Цвет",
+                        "pearlWhite":"Жемчужно-белый",
+                        "brilliantSilver":"Блестящий серебристый",
+                        "gunMetallic":"Оружейный металлик",
+                        "superBlack":"Супер черный",
+                        "coulisRed":"Красный металлик",
+                        "glacierWhite":"Белый ледник",
+                        "deepBluePearl":"Жемчужный темно-синий",
+                        "forgedBronze":"Кованая бронза"
                     }
                 }
             },
@@ -156,11 +167,22 @@ div::before
                         "ZOOM_OUT":"Зменшити"
                     },
                     "filter":{
-                        "ALL" : "Усі"
+                        "ALL" : "Усі",
+                        "ONLY_CHARGES":"Тiльки электрозаправки",
+                        "ELECTROCARS":"Электромобiлi"
                     },
                     "marker":{
                         "M_FAST":"Швидкісна зарядка",
-                        "M_NORMAL":"Звичайна зарядка"
+                        "M_NORMAL":"Звичайна зарядка",
+                        "M_COLOR" : "Колiр",
+                        "pearlWhite":"Перлинно-білий",
+                        "brilliantSilver":"Блискучий сріблястий",
+                        "gunMetallic":"Збройний металік",
+                        "superBlack":"Супер чорний",
+                        "coulisRed":"Червоний металік",
+                        "glacierWhite":"Білий льодовик",
+                        "deepBluePearl":"Перлинний темно-синій",
+                        "forgedBronze":"Кована бронза"
                     }
                 }
             },
@@ -177,11 +199,22 @@ div::before
                         "ZOOM_OUT":"Zoom out"
                     },
                     "filter":{
-                        "ALL" : "All"
+                        "ALL" : "All",
+                        "ONLY_CHARGES":"Chargers only",
+                        "ELECTROCARS":"Electrocars"
                     },
                     "marker":{
-                        "M_FAST":" Fast charging",
-                        "M_NORMAL":"Normal charging"
+                        "M_FAST"  :"Fast charging",
+                        "M_NORMAL":"Normal charging",
+                        "M_COLOR" :"Color",
+                        "pearlWhite":"Pearl White",
+                        "brilliantSilver":"Brilliant Silver",
+                        "gunMetallic"    :"Gun Metallic",
+                        "superBlack"     :"Super Black",
+                        "coulisRed"      :"Coulis Red",
+                        "glacierWhite"   :"Glacier White",
+                        "deepBluePearl"  :"Deep Blue Pearl",
+                        "forgedBronze"   :"Forged Bronze"
                     }
                 }
             }]
